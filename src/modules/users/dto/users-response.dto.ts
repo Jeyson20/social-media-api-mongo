@@ -2,7 +2,7 @@ import { Exclude, Expose } from "class-transformer";
 
 @Exclude()
 export class UsersResponseDto {
-    @Expose({toClassOnly:true})
+    @Expose()
     readonly id: string
     @Expose()
     readonly firstName: string;
