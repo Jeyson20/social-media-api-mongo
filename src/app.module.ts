@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { PostsModule } from './modules/posts/posts.module';
 
 @Module({
   imports: [
@@ -9,7 +10,8 @@ import { AuthModule } from './modules/auth/auth.module';
       // connectionName: 'cats',
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    PostsModule
   ],
 })
 export class AppModule {}
