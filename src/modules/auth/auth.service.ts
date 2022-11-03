@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
@@ -24,7 +24,8 @@ export class AuthService {
       return result;
 
     } catch (error) {
-      throw new BadRequestException(error.message)
+      if (error.code == 11000) throw new ConflictException('Email already exists')
+      throw new BadRequestException()
     }
   }
 
@@ -34,6 +35,7 @@ export class AuthService {
     try {
       const findUser = await this.userModel.findOne({ email });
       if (!findUser) throw new BadRequestException('User or Password incorrect');
+      if (findUser.isActive == false) throw new BadRequestException('Disabled user, contact administrator!')
 
       const checkPassword = await bcrypt.compare(password, findUser.password);
       if (!checkPassword) throw new NotFoundException('User or Password incorrect');

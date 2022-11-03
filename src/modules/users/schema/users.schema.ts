@@ -23,7 +23,7 @@ export class Users {
     @Prop()
     phoneNumber: string;
 
-    @Prop({ default: false })
+    @Prop({ default: true })
     isActive: boolean;
 
 }
