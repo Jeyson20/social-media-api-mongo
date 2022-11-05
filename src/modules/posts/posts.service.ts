@@ -1,15 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { plainToInstance } from 'class-transformer';
+import { Model } from 'mongoose';
 import { CreatePostDto } from './dto/create-post.dto';
+import { PostsResponseDto } from './dto/posts-response.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Posts, PostsDocument } from './schema/post.schema';
 
 @Injectable()
 export class PostsService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
-  }
+  constructor(@InjectModel(Posts.name) private readonly postModel: Model<PostsDocument>) { }
 
-  findAll() {
-    return `This action returns all posts`;
+  async create(createPostDto: CreatePostDto) {
+    try {
+
+      const createPost = await this.postModel.create(createPostDto);
+      return createPost;
+
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+
+  }
+  async findAll() {
+    const posts = await this.postModel.find();
+    const postsResponse = plainToInstance(PostsResponseDto, posts);
+    return postsResponse;
   }
 
   findOne(id: number) {
