@@ -25,7 +25,7 @@ export class AuthService {
 
     } catch (error) {
       if (error.code == 11000) throw new ConflictException('Email already exists')
-      throw new BadRequestException()
+      throw new BadRequestException(error.message)
     }
   }
 
