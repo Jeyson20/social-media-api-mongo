@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Type } from 'class-transformer';
+import { Document, Schema as Schemaa, Types } from 'mongoose';
+import { Roles } from 'src/modules/roles/schema/roles-schema';
 
 export type UsersDocument = Users & Document;
 
@@ -17,8 +19,11 @@ export class Users {
     @Prop({ required: true })
     password: string;
 
-    @Prop({ type: ['user', 'admin'], default: 'user' })
-    role: string
+    @Prop([{
+        type: Schemaa.Types.String,
+        ref: Roles["name"]
+    }])
+    roles: Types.Array<Roles>
 
     @Prop()
     phoneNumber: string;
